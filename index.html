@@ -1,0 +1,110 @@
+<?php session_start(); 
+
+if ($_GET["out"]="yes")
+{
+    $_SESSION = array();
+}
+?>
+<!-- ne pas supprimer -->
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>Accueil</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Custom styles for this template -->
+    <link href="./css/index.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <div class="divHeader">
+            <h1>TRANSROAD</h1>
+            <h2 class="fw-bold">- TransCompétences -</h2>
+        </div>
+    </header>
+    <main>
+        <div class="principalBlock">
+            <div class="blockImg">
+                <img src="./assets/img/user.png" alt="user_icon">
+            </div>
+            <div class="blockForm">
+                <form action="./action/user_login.php" method="POST">
+                    <legend>Veuillez vous connecter pour accéder aux services</legend>
+                    <div class="form-group emailDiv">
+                        <label for="email">
+                            <img src="./assets/img/mail.png" alt="email_icon">
+                        </label>
+                        <input type="text" name="email" placeholder="Email" id="email" class="form-control" />
+                    </div>
+                    <div class="form-group mdpDiv">
+                        <label for="password">
+                            <img src="./assets/img/padlock.png" alt="password_icon">
+                        </label>
+                        <input type="password" name="password" placeholder="Mot de passe" id="password"
+                            class="form-control" />
+                    </div>
+                    <div class="form-group rememberMe">
+                        <div class="remember">
+                            <input type="checkbox" name="rememberMe" value="#" />
+                            <p class="m-0">Se souvenir de moi</p>
+                        </div>
+                        <button type="button" class="btn resetBtn" data-bs-toggle="modal" data-bs-target="#popup">
+                            Mot de passe oublié ?
+                        </button>
+                    </div>
+                    <div class="btnDiv">
+                        <button class="btn submitBtn" type="submit">Envoyer</button>
+                    </div>
+
+                    <!-- Si l'utilisateur se trompe affichage d'un message d'erreur -->
+                    <?php
+                // insertion d'un message d'erreur
+                if(isset($_GET['error'])){
+                    $err = $_GET['error'];
+                    if($err==1){
+                        echo "<p style='color:red'>Rentrer un email ou un mot de passe </p>";
+                        }
+                    if($err==2){
+                        echo "<p style='color:red'>L'email utilisé n'est pas correct</p>";
+                        }
+                    if($err==3){
+                        echo "<p style='color:red'>Mot de passe incorrect </p>";
+                        }
+                }
+                ?>
+                </form>
+            </div>
+        </div>
+    </main>
+    <div id="popup" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Un email contenant la procédure de réinitialisation du mot de passe vient de vous être envoyé.</p>
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>copyright Findev#11</p>
+    </footer>
+
+
+    <script src="../js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
