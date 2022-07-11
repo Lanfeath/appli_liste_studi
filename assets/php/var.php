@@ -22,16 +22,10 @@ if(isset($_SESSION["username"]))
 {
     $username = $_SESSION["username"];
     $surname = $_SESSION["surname"];
-    $service = $_SESSION["service"];
     
         // mettre en place les variables de connection et/ou admin
-    $is_connected=True;
-    ($service==="it")?$is_admin=True:$is_admin=False;
-
-        //définir à quelles roles a droit l'utilisateur
-    $access_authorised =array(
-        "dashboard" => $_SESSION["dashboard"],
-        "cost_estimation" => $_SESSION["cost_estimation"],
-        "cost_database" => $_SESSION["service"],
-    );      
+    $is_connected=True; 
 }
+
+$username="John";
+$surname="Doe";

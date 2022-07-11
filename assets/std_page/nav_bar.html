@@ -1,0 +1,74 @@
+<?php include "../../assets/php/var.php"?>
+
+<aside id="menu" class="show">
+  <div class="menu-header">
+    <div class="user-avatar">
+      <i class="bi bi-person"></i>
+    </div>
+    <div class="user-info">
+      <h4 class="fw-bold">
+        <?php printf("%s %s", ucfirst($username), strtoupper($surname))?> <!-- afficher le prénom et nom --> 
+      </h4>
+    </div>
+  </div>
+
+    <ul class="nav flex-column">
+        <li>Mes tâches</li>
+        <ul>
+            <li class="nav-item">
+                <a href="../../pages/mes_taches/list_view.html" class="nav-link">
+                    <i class="bi bi-house-door-fill"></i>
+                    <strong class="menu-item">Vue par liste</strong>                        
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="../../pages/mes_taches/date_view.html" class="nav-link">
+                    <i class="bi bi-house-door-fill"></i>
+                    <strong class="menu-item">Vue par date de fin</strong>                        
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="../../pages/mes_taches/matrix_view.html" class="nav-link">
+                    <i class="bi bi-house-door-fill"></i>
+                    <strong class="menu-item">Vue matrice d'Heisenhower</strong>                        
+                </a>
+            </li>
+        </ul>
+
+        <li>Les tâches de l'équipe</li>
+        <ul>
+            <li class="nav-item">
+                <a href="../../pages/taches_equipe/view_jenny.html" class="nav-link">
+                    <i class="bi bi-house-door-fill"></i>
+                    <strong class="menu-item">Jenny</strong>                        
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="../../pages/taches_equipe/view_marc.html" class="nav-link">
+                    <i class="bi bi-house-door-fill"></i>
+                    <strong class="menu-item">Marc</strong>                        
+                </a>
+            </li>
+        </ul> 
+
+        <li> Nouvel élément</li>
+        <ul>
+            <li class="nav-item">
+                <a href="../../pages/nouvel_element/new_list.html" class="nav-link">
+                    <i class="bi bi-house-door-fill"></i>
+                    <strong class="menu-item">Nouvelle liste</strong>                        
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="../../pages/nouvel_element/new_task.html" class="nav-link">
+                    <i class="bi bi-house-door-fill"></i>
+                    <strong class="menu-item">Nouvelle tâche</strong>                        
+                </a>
+            </li>
+        </ul> 
+    </ul>
+</aside>
