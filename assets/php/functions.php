@@ -1,4 +1,5 @@
 <?php
+include_once "var.php";
 
 // function for connection to Database
 function db_connect($servername,$database1,$username,$password)
@@ -73,3 +74,19 @@ function db_dump($db_name, $db_table,$primary_key_name, $primary_key){
 
     return $message;
 }
+
+/*
+function get_team_members($username,$surname){
+    
+    // Function to have the list of the name team members without the name of the person registered 
+    $my_Db_Connection= db_connect("localhost","appli_liste","root","");
+    $sql = "SELECT user_name, user_surname FROM users";
+    foreach ($my_Db_Connection->query($sql) as $user) {
+        if ($user["user_name"]!==$username && $user["user_surname"]!==$surname){
+            $array_team[]=$user["user_name"];
+        };
+    }
+
+    return $array_team;
+}
+*/

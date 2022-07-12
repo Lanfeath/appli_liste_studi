@@ -1,4 +1,7 @@
-<?php include "../../assets/php/var.php"?>
+<?php 
+    include "../../assets/php/var.php";
+    include "../../assets/php/functions.php";
+?>
 
 <aside id="menu" class="show">
   <div class="menu-header">
@@ -40,18 +43,22 @@
         <li>Les tâches de l'équipe</li>
         <ul>
             <li class="nav-item">
-                <a href="../../pages/taches_equipe/view_jenny.html" class="nav-link">
+                <a href="../../pages/taches_equipe/team_list_view.html?team=toute l'équipe" class="nav-link">
                     <i class="bi bi-house-door-fill"></i>
-                    <strong class="menu-item">Jenny</strong>                        
+                    <strong class="menu-item">Toute l'équipe</strong>                        
                 </a>
             </li>
-
-            <li class="nav-item">
-                <a href="../../pages/taches_equipe/view_marc.html" class="nav-link">
-                    <i class="bi bi-house-door-fill"></i>
-                    <strong class="menu-item">Marc</strong>                        
-                </a>
-            </li>
+            <?php
+                // on mets les noms des membres de l'équipe dans le menu
+                for($i = 0; $i < count($array_team); ++$i) {
+                    echo '<li class="nav-item">',
+                        '<a href="../../pages/taches_equipe/team_list_view.html?team='.$array_team[$i].'" class="nav-link">',
+                            '<i class="bi bi-house-door-fill"></i>',
+                            '<strong class="menu-item"> '.$array_team[$i].'</strong>',                        
+                        '</a>',
+                    '</li>';
+                }
+            ?>
         </ul> 
 
         <li> Nouvel élément</li>

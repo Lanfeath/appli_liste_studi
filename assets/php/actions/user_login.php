@@ -19,7 +19,6 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['email']
     $stm_login = $my_Db_Connection->prepare("SELECT user_name, user_surname, user_email, user_pwd 
         FROM users 
         WHERE user_email = :email ") ;
-    
     // bind parameter
     $stm_login ->bindParam(':email', $email_db);
 
@@ -28,7 +27,7 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['email']
 
     $stm_login->execute();
     $arr_login = $stm_login->fetchAll();  //recup of the value given by $statement (array with username, surname, email and password)
-    
+
     // if the email is not inserted in the database the $arr_login is empty
     if (empty($arr_login)){
         header('Location: ../../../index.html?error=2');
@@ -40,13 +39,25 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['email']
         {
             $_SESSION["username"]=$row["user_name"];
             $_SESSION["surname"]=$row["user_surname"];
-            include("../var.php"); //used to insert new value with session active
-            header('Location: ../../../pages/mes_taches/list_view.html');    // go to the main page             
         }else
         {
             header('Location: ../../../index.html?error=3');
         }
     }  
+
+    // on mets les noms des membres de l'équipe dans le menu
+    $sql = "SELECT user_name, user_surname FROM users";
+    foreach ($my_Db_Connection->query($sql) as $user) {
+        if ($user["user_name"]!=="John" && $user["user_surname"]!=="Doe"){
+            $array_team[]=$user["user_name"];
+        };
+    }
+
+    $_SESSION["team_members"]=$array_team;
+    var_dump($_SESSION["team_members"]);
+    include("../var.php"); //used to insert new value with session active
+    header('Location: ../../../pages/mes_taches/list_view.html');    // go to the main page     
+
     
 }
 else
