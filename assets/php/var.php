@@ -14,7 +14,7 @@ $db_to_use = "u933389189_transroad_user";
 
 $servername = "localhost";
 $db_username = "root";
-$password = "";
+$dbpassword = "";
 $db_to_use = "appli_liste"; 
 
 // get $_session variables

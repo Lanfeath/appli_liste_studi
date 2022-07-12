@@ -1,11 +1,11 @@
 <?php
 session_start();
-include "../function.php";
+include "../functions.php";
 include "../var.php";
 
  // insert which DB to connect to
 
-if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['password']))
+if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['email']) && !empty($_POST['password']))
 {
     $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
     
@@ -18,7 +18,7 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['passwor
     // prepare SQL statement     
     $stm_login = $my_Db_Connection->prepare("SELECT user_name, user_surname, user_email, user_pwd 
         FROM users 
-        WHERE email = :email ") ;
+        WHERE user_email = :email ") ;
     
     // bind parameter
     $stm_login ->bindParam(':email', $email_db);
@@ -31,7 +31,7 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['passwor
     
     // if the email is not inserted in the database the $arr_login is empty
     if (empty($arr_login)){
-        header('Location: ../../index.html?error=2');
+        header('Location: ../../../index.html?error=2');
     }
     
         // check that the password and the email match the DB entries
@@ -40,18 +40,18 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['passwor
         {
             $_SESSION["username"]=$row["user_name"];
             $_SESSION["surname"]=$row["user_surname"];
-            include("../assets/php/var.php"); //used to insert new value with session active
-            header('Location: ../pages/dashboard/dashboard.html');    // go to the main page             
+            include("../var.php"); //used to insert new value with session active
+            header('Location: ../../../pages/mes_taches/list_view.html');    // go to the main page             
         }else
         {
-            header('Location: ../../index.html?error=3');
+            header('Location: ../../../index.html?error=3');
         }
     }  
     
 }
 else
 {
-   header('Location: ../../index.html?error=1');
+   header('Location: ../../../index?error=1');
 }
 
 ?> 
