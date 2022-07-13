@@ -53,8 +53,16 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['email']
         };
     }
 
+    
+    // on mets les noms des liste existantes dans une variable
+    $sql_liste = "SELECT list_name FROM bdd_listes";
+    foreach ($my_Db_Connection->query($sql_liste) as $liste) {
+            $array_list[]=$liste["list_name"];
+    }
+
     $_SESSION["team_members"]=$array_team;
-    var_dump($_SESSION["team_members"]);
+    $_SESSION["list_name"]=$array_list;
+
     include("../var.php"); //used to insert new value with session active
     header('Location: ../../../pages/mes_taches/list_view.html');    // go to the main page     
 

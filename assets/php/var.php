@@ -23,6 +23,7 @@ if(isset($_SESSION["username"]))
     $username = $_SESSION["username"];
     $surname = $_SESSION["surname"];
     $array_team = $_SESSION["team_members"];
+    $array_list=$_SESSION["list_name"];
     
 // mettre en place les variables de connection et/ou admin
     $is_connected=True; 

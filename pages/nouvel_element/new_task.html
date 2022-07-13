@@ -38,44 +38,84 @@ include_once "../../assets/php/var.php";
                     <input class="form-control-sm mx-2" type="text" placeholder="Nom de la tâche" name="task_name" required>
                 </div>
 
-                <label for="task_responsible">Qui est le responsable?</label>
+                <div>
+                    <label for="task_list_ref">Liste associée à la tâche:</label>
 
-                <select name="task_list_ref" id="task_list_ref" required>
-                    <option value="">--Choisir la liste dans laquelle mettre la tâche--</option>
-                    <option value="Aucune">Aucune</option>
-                    <?php
-                        for ($i=0;$i=count($array_list);$i++){
-                           echo '<option value="'.$array_list[$i].'">List: '.$array_list[$i].'</option>';
-                        }
-                    ?>
-                </select>
+                    <select name="task_list_ref" id="task_list_ref" required>
+                        <option value="">--Choisir la liste--</option>
+                        <option value="Aucune">Aucune</option>
+                        <?php
+                            for ($i=0;$i < count($array_list);$i++){
+                            echo '<option value="'.$array_list[$i].'">'.$array_list[$i].'</option>';
+                            }
+                        ?>
+                    </select>
+                </div>
 
                 <div id="task_description" class="form-group">
                     <label for="task_description">Description de la tâche</label>
                     <textarea rows="4" cols="50" name="task_description" placeholder="Description de la tâche" required></textarea>
                 </div>
-            
-                <label for="task_responsible">Qui est le responsable?</label>
 
-                <select name="task_responsible" id="task_responsible" required>
-                    <option value="">--Choisir le responsable de la tâche--</option>
-                    <option value="John">John</option>
-                    <option value="Jenny">Jenny</option>
-                    <option value="Marc">Marc</option>
-                </select>
+                <div>
+                    <label for="task_responsible">Qui est le responsable?</label>
+
+                    <select name="task_responsible" id="task_responsible" required>
+                        <option value="">--Choisir le responsable de la tâche--</option>
+                        <option value="<?php ucfirst($username) ?>">Moi (<?php ucfirst($username) ?>) </option>
+                        <?php
+                            // on mets les noms des membres de l'équipe dans le menu
+                            for($i = 0; $i < count($array_team); ++$i) {
+                                echo ' <option value="'.$array_team[$i].'">'.$array_team[$i].'</option>';
+                            }
+                        ?>
+                        <option value="autre">Autre (voir commentaires)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="task_status">Etat de la tâche?</label>
+
+                    <select name="task_status" id="task_status" required>
+                        <option value="">--Choisir l'état de la tâche--</option>
+                        <option value="not started">Non commencée</option>
+                        <option value="in progress">En cours</option>
+                        <option value="finished">Terminée</option>
+                        <option value="stand by">En suspend</option>
+                    </select>
+                </div>
 
                 <div id="task_end_date" class="form-group">
                     <label for="task_end_date">Date de fin requise: </label>
                     <input class="form-control-sm mx-2" type="date" placeholder="Selectionnez la date de fin" name="task_end_date" required>
                 </div>
                 <div>
-                    <input type="checkbox" id="task_important" name="important" value="important">
+                    <input type="checkbox" id="task_important" name="task_important" value="1">
                     <label for="important">A cocher si la tâche est importante</label>
+                </div>
+                <div id="task_comment" class="form-group">
+                    <label for="task_comment">Commentaires</label>
+                    <textarea rows="1" cols="50" name="task_comment" placeholder="Commentaires"></textarea>
                 </div>
             </div>
             <input type="submit" value="Créer une nouvelle tâche">
         </form>
+        <?php
+        // insertion d'un message de résultat
+
+        if(isset($_GET['result'])){
+            if($_GET['result']==="success"){
+                echo "<p style='color:green'>La nouvelle tâche a été créée </p>";
+                }
+            if($_GET['result']==="error"){
+                echo "<p style='color:red'>Une erreur est survenue lors de la création de la tâche</p>";
+                }
+        
+        }
+        ?>
     </main>
+
+
 
     <!-- insertion of standard footer -->
     <?php include_once("../../assets/std_page/footer.html") ?>
