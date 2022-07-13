@@ -35,13 +35,14 @@
 ***
 
 *** Langages utilisés:
- - Front: HTML, CSS, JS --> application web, langages connus et souvent utilisés
+ - Front: HTML, CSS (BOOTSTRAP) --> application web, langages connus et souvent utilisés
  - Back: PHP --> s'intègre très bien avec le HTML, facile à utiliser avec Mysql.
  - BDD: mysql --> BDD relationnelle
 
 Autres outils:
  - Git -> gestion des versions de code
  - VS code -> environnement de programmation prenant en compte différents langages
+ - XAMP -> teste en local du PHP
  - Hebergeur: Hostinger --> dispose d'une BDD mysql et permet l'edition des fichiers en direct (outil de gestion des fichiers propriétaire).
 ***
 

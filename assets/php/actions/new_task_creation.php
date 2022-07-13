@@ -31,12 +31,12 @@ include "../var.php";
 
     $stm_insert->execute();
     
-    header('Location: ../../../pages/nouvel_element/new_task.html?result=success');
+    header('Location: ../../../pages/nouvel_element/nouvel_element.html?result_task=success');
 
  }
  else
  {
-    header('../../../pages/nouvel_element/new_task.html?result=error');
+    header('../../../pages/nouvel_element/nouvel_element.html?result_task=error');
 
  }
 

@@ -1,61 +1,76 @@
 <?php
-include "../php/function.php";
-include "../php/var.php";
+(session_status() === PHP_SESSION_NONE)?session_start():""; //check if session active otherwise activate it
+
+include "../functions.php";
+include "../var.php";
 
  // insert which DB to connect to
- $dbtable="users";
+ $dbtable="bdd_lists";
 
- 
- if(isset($_POST['list_name']) && isset($_POST['surname'])&& isset($_POST['service'])&& isset($_POST['email'])&& isset($_POST['password']))
+ if(isset($_POST['list_name']))
  {
- 
     $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
-        
-    // create an array of all the POST variables you want to use
-    $fields = array('username','surname','service','position','email','password');
-
-    // prepare SQL statement and bind values    
-    $stm_insert = $my_Db_Connection->prepare(query_insert($dbtable,$fields)) ;
-
-    $count=1;
-    foreach($fields as $field){
-        $stm_insert ->bindParam($count, $_POST[$field]);
-        $count++;
-    }
-
-     // verification of value not in DB to allow the writing
-    try
-    {
-        $query_check= $my_Db_Connection->prepare("SELECT email
-            from users
-            where
-            email = :email");
-        $query_check ->bindParam(":email", $_POST["email"]);
+    
+            
+    try{
+        // verification of value not in DB to allow the writing
+        $query_check= $my_Db_Connection->prepare("SELECT list_name
+        from bdd_lists
+        where
+        list_name = :list_name");
+        $query_check ->bindParam(":list_name", $_POST["list_name"]);
 
         $query_check->execute();
         $answers = $query_check->fetch();
 
         if($answers) 
         {
-            //this email already exist
-            header('Location: ../pages/administration/user_mgt.html?=erreur1');
+            //this name already exist
+            header('Location: ../../../pages/nouvel_element/nouvel_element.html?result_list=name');
         }
-
     }
     catch (PDOException $ex)
     {
         die("Failed to run query: " . $ex->getMessage());
     }
 
-    $stm_insert->execute();
-    
-    header('Location: ../pages/administration/user_mgt.html?=success');
+    try{
+        // create an array of all the POST variables you want to use
+        $fields = array('list_name');
 
+        // prepare SQL statement and bind values    
+        $stm_insert = $my_Db_Connection->prepare(query_insert($dbtable,$fields)) ;
+
+        $count=1;
+        foreach($fields as $field){
+            $stm_insert ->bindParam($count, $_POST[$field]);
+            $count++;
+        }
+
+        $stm_insert->execute();
+        $array_list=[];
+                // on mets les noms des liste existantes dans une variable
+        $sql_liste = "SELECT list_name FROM bdd_lists";
+        foreach ($my_Db_Connection->query($sql_liste) as $liste) {
+                $array_list[]=$liste["list_name"];
+        }
+
+        $_SESSION["team_members"]=$array_team;
+        $_SESSION["list_name"]=$array_list;
+
+        include("../var.php"); //used to insert new value with session active
+
+        header('Location: ../../../pages/nouvel_element/nouvel_element.html?result_list=success');
+    }
+    catch (PDOException $ex)
+    {
+        die("Failed to run query: " . $ex->getMessage());
+    }
  }
  else
  {
-    header('Location: ../pages/administration/user_mgt.html?=erreur2');
-
+    echo "is not set";
+    header("../../../pages/nouvel_element/nouvel_element.html?result_list=error");
  }
 
 

@@ -55,7 +55,7 @@ if(isset($_POST['email']) && isset($_POST['password']) && !empty($_POST['email']
 
     
     // on mets les noms des liste existantes dans une variable
-    $sql_liste = "SELECT list_name FROM bdd_listes";
+    $sql_liste = "SELECT list_name FROM bdd_lists";
     foreach ($my_Db_Connection->query($sql_liste) as $liste) {
             $array_list[]=$liste["list_name"];
     }
