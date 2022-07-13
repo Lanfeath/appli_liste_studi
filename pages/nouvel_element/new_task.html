@@ -38,6 +38,18 @@ include_once "../../assets/php/var.php";
                     <input class="form-control-sm mx-2" type="text" placeholder="Nom de la tâche" name="task_name" required>
                 </div>
 
+                <label for="task_responsible">Qui est le responsable?</label>
+
+                <select name="task_list_ref" id="task_list_ref" required>
+                    <option value="">--Choisir la liste dans laquelle mettre la tâche--</option>
+                    <option value="Aucune">Aucune</option>
+                    <?php
+                        for ($i=0;$i=count($array_list);$i++){
+                           echo '<option value="'.$array_list[$i].'">List: '.$array_list[$i].'</option>';
+                        }
+                    ?>
+                </select>
+
                 <div id="task_description" class="form-group">
                     <label for="task_description">Description de la tâche</label>
                     <textarea rows="4" cols="50" name="task_description" placeholder="Description de la tâche" required></textarea>
@@ -45,7 +57,7 @@ include_once "../../assets/php/var.php";
             
                 <label for="task_responsible">Qui est le responsable?</label>
 
-                <select name="responsible" id="task_responsible" required>
+                <select name="task_responsible" id="task_responsible" required>
                     <option value="">--Choisir le responsable de la tâche--</option>
                     <option value="John">John</option>
                     <option value="Jenny">Jenny</option>
