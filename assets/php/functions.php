@@ -54,17 +54,37 @@ function query_select_where(string $table, array $datafields)
     return $query;
 }
 
-    // function to delete from a DB ($db_name is the connected to) into a specific table using a key_ref
-function db_dump($db_name, $db_table,$primary_key_name, $primary_key){
-    
-    try{
 
-        $delete = 'DELETE FROM '.$db_table .' WHERE '.$primary_key_name.' = :primary_key';
+function db_dump_list($db_name,$list_name)
+{
+    // function to delete the list from DB
+    try{
+        $delete = 'DELETE FROM bdd_lists WHERE list_name = :list_name';
         $stmt = $db_name->prepare($delete);
-        $stmt->bindValue(":primary_key",$primary_key);
+        $stmt->bindValue(":list_name",$list_name);
         $stmt->execute();
 
-        $message="la ligne a été supprimée";
+        $message="la liste ".$list_name." a été supprimée";
+     }
+    catch(PDOException $error)
+    {
+        echo 'Connection error: ' . $error->getMessage() ."<br>";
+        die();
+    }
+
+    return $message;
+}
+
+function db_dump_task($db_name,$task_name)
+{
+    // function to delete the task from DB
+    try{
+        $delete = 'DELETE FROM bdd_task WHERE task_name = :task_name';
+        $stmt = $db_name->prepare($delete);
+        $stmt->bindValue(":task_name",$task_name);
+        $stmt->execute();
+
+        $message="la tâche ".$task_name." a été supprimée";
      }
     catch(PDOException $error)
     {

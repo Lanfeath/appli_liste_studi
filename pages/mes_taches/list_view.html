@@ -9,8 +9,15 @@ include "../../assets/php/functions.php";
 $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
 
 
-// récupération des noms des listes sous forme de tableau
+if (isset($_POST['Delete_list']))
+{ 
+    $message=db_dump_list($my_Db_Connection, $_POST['Delete_list']);
+}
 
+if (isset($_POST['Delete_task']))
+{ 
+    $message=db_dump_task($my_Db_Connection, $_POST['Delete_task']);
+}
 
 ?>
 
@@ -34,7 +41,6 @@ $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
 
     <!-- insertion of standard navbar -->
     <?php 
-    echo "test 1";
     require_once ("../../assets/std_page/nav_bar.html") ?>
     <p> test 2</p>
     <main>
@@ -54,7 +60,35 @@ $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
             $task_list= task_list_retrieve($my_Db_Connection,$list_name);
             $array_task= task_info_retrieve($my_Db_Connection,$list_name);
 
-            echo '<h3>Liste: '. $list_name.' </h3>';
+                // on compte le nombre de tâche == "terminée"
+            $count_finished=0;
+            foreach ($task_list as $list){
+                if($array_task[$list]["task_status"]==="Terminée"){
+                    $count_finished+=1;
+                }
+            }
+
+            if ($list_name==="Aucune"){
+                echo '
+                    <div class="row">
+                        <h3 class="col-4"> Aucune liste </h3>
+                        <h3 class="col-8">Tâches terminées: '.$count_finished.'/'.count($task_list).'</h3>
+                    </div>';
+            }
+            else{
+                echo '
+                <div class="row">
+
+                    <h3 class="col-4">'. ucfirst($list_name).'  </h3>
+                    <h3 class="col-4">Tâches terminées: '.$count_finished.'/'.count($task_list).'</h3>
+                    <div class="col-4 align-right">
+                        <form action="./list_view.html" method="post">
+                            <button type="submit" class="btn btn-sm btn-primary">Modifier</button>
+                            <button type="submit" class="btn btn-sm btn-alert" value="'.$list_name.'" name="Delete_list" >Supprimer</button>
+                        </form>
+                    </div>
+                </div>';
+            }
             foreach ($task_list as $list)
             {
                 echo '<div class="card-deck">';
@@ -63,8 +97,10 @@ $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
                         echo '<h5 class="card-header d-flex justify-content-between align-items-center ">
                             '.$list.'
                             <div>
-                                <button type="button" class="btn btn-sm btn-primary">Modifier</button>
-                                <button type="button" class="btn btn-sm btn-alert">Supprimer</button>
+                                <form action="./list_view.html" method="post">
+                                    <button type="submit" class="btn btn-sm btn-primary">Modifier</button>
+                                    <button type="submit" class="btn btn-sm btn-alert" value="'.$list.'" name="Delete_task" >Supprimer</button>
+                                <form>
                             </div>
                           </h5>';
                         echo '<div class="card-body">';
@@ -107,6 +143,12 @@ $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
                 echo '</div>';
             }
         }
+
+        // Publication du message de suppression
+        if (isset($message)){
+            echo '<div  class="p-5 text-uppercase font-weight-bold text-center text-danger ">' . $message . '</div>';
+        }
+
         ?>
     </main>
 

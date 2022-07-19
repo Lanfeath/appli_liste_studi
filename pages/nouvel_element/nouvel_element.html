@@ -1,8 +1,13 @@
 <?php
 include_once "../../assets/php/var.php";
+include_once "../../assets/php/functions.php";
 
 // vérifier que l'on soit connecté pour accéder aux pages sinon retour vers index
 //(!$is_connected)?header('Location: ../../index.html'):"";
+
+//connection to DB
+$my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
+
 ?>
 
 <!DOCTYPE html>
@@ -81,6 +86,9 @@ include_once "../../assets/php/var.php";
                             <select name="list_name" id="list_name" required>
                                 <option value="">--Choisir la liste--</option>
                                 <?php
+                                // impression pour chaque liste existante
+                                $array_list= list_retrieve($my_Db_Connection);
+
                                     for ($i=0;$i < count($array_list);$i++){
                                     echo '<option value="'.$array_list[$i].'">'.$array_list[$i].'</option>';
                                     }
@@ -114,10 +122,10 @@ include_once "../../assets/php/var.php";
 
                             <select name="task_status" id="task_status" required>
                                 <option value="">--Choisir l'état de la tâche--</option>
-                                <option value="not started">Non commencée</option>
-                                <option value="in progress">En cours</option>
-                                <option value="finished">Terminée</option>
-                                <option value="stand by">En suspend</option>
+                                <option value="Non commencée">Non commencée</option>
+                                <option value="En cours">En cours</option>
+                                <option value="Terminée">Terminée</option>
+                                <option value="En suspend">En suspend</option>
                             </select>
                         </div>
 
