@@ -1,8 +1,17 @@
 <?php
-include_once "../../assets/php/var.php";
+include "../../assets/php/var.php";
+include "../../assets/php/functions.php";
 
 // vérifier que l'on soit connecté pour accéder aux pages sinon retour vers index
 //(!$is_connected)?header('Location: ../../index.html'):"";
+
+//connection to DB
+$my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
+
+
+// récupération des noms des listes sous forme de tableau
+
+
 ?>
 
 <!DOCTYPE html>
@@ -21,15 +30,84 @@ include_once "../../assets/php/var.php";
 
 <body>
     <!-- insertion of standard header -->
-    <?php include_once("../../assets/std_page/header.html") ?>
+    <?php require_once ("../../assets/std_page/header.html") ?>
 
     <!-- insertion of standard navbar -->
-    <?php include_once("../../assets/std_page/nav_bar.html") ?>
-
+    <?php 
+    echo "test 1";
+    require_once ("../../assets/std_page/nav_bar.html") ?>
+    <p> test 2</p>
     <main>
-        <div>
-            <p>Voici la vue par liste</p>
-        </div>
+        <h1>Voici la vue par liste</h1>
+
+        <!-- insertion of existing list -->
+
+        <!-- Debut du php-->
+        <?php
+
+        // impression pour chaque liste existante
+        $array_list= list_retrieve($my_Db_Connection);
+
+        foreach ($array_list as $list_name)
+        {
+                //on recupere les tâches associées
+            $task_list= task_list_retrieve($my_Db_Connection,$list_name);
+            $array_task= task_info_retrieve($my_Db_Connection,$list_name);
+
+            echo '<h3>Liste: '. $list_name.' </h3>';
+            foreach ($task_list as $list)
+            {
+                echo '<div class="card-deck">';
+                    //impression pour chaque tâche d'une card et de ses infos:
+                    echo '<div class="card">';
+                        echo '<h5 class="card-header d-flex justify-content-between align-items-center ">
+                            '.$list.'
+                            <div>
+                                <button type="button" class="btn btn-sm btn-primary">Modifier</button>
+                                <button type="button" class="btn btn-sm btn-alert">Supprimer</button>
+                            </div>
+                          </h5>';
+                        echo '<div class="card-body">';
+                            echo '<div class="container">';
+                                echo '<div class="row">';
+                                echo '<div class="col-4">Date de création:</div>';
+                                echo '<div class="col-8">'.$array_task[$list]["task_create_date"].'</div>';
+                                echo '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-4">Créateur:</div>';
+                                    echo '<div class="col-8">'.$array_task[$list]["task_create_by"].'</div>';
+                                echo '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-4">Description:</div>';
+                                    echo '<div class="col-8">'.$array_task[$list]["task_description"].'</div>';
+                                echo '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-4">Responsable de la tâche:</div>';
+                                    echo '<div class="col-8">'.$array_task[$list]["task_responsible"].'</div>';
+                                echo '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-4">Date de fin prévue:</div>';
+                                    echo '<div class="col-8">'.$array_task[$list]["task_end_date"].'</div>';
+                                echo '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-4">Etat de la tâche:</div>';
+                                    echo '<div class="col-8">'.$array_task[$list]["task_status"].'</div>';
+                                echo '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-4">Important:</div>';
+                                    echo '<div class="col-8">'.$array_task[$list]["task_important"].'</div>';
+                                echo '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-4">Commentaires:</div>';
+                                    echo '<div class="col-8">'.$array_task[$list]["task_comment"].'</div>';
+                                echo '</div>';
+                            echo '</div>';
+                        echo '</div>';
+                    echo '</div>';
+                echo '</div>';
+            }
+        }
+        ?>
     </main>
 
     <!-- insertion of standard footer -->

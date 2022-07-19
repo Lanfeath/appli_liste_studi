@@ -75,18 +75,42 @@ function db_dump($db_name, $db_table,$primary_key_name, $primary_key){
     return $message;
 }
 
-/*
-function get_team_members($username,$surname){
+function list_retrieve($my_Db_Connection){
+// récupérer les noms des liste existantes dans une variable
+    $array_list=["Aucune"];
+
+    $sql_list = "SELECT list_name FROM bdd_lists";
+    foreach ($my_Db_Connection->query($sql_list) as $list) {
+            $array_list[]=$list["list_name"];
+    }
+    return $array_list;
+}
+
+function task_list_retrieve($my_Db_Connection, $list_name){
+    // récupérer les noms des tâches par liste existante dans une variable
+        $array_task_list=[];
     
-    // Function to have the list of the name team members without the name of the person registered 
-    $my_Db_Connection= db_connect("localhost","appli_liste","root","");
-    $sql = "SELECT user_name, user_surname FROM users";
-    foreach ($my_Db_Connection->query($sql) as $user) {
-        if ($user["user_name"]!==$username && $user["user_surname"]!==$surname){
-            $array_team[]=$user["user_name"];
-        };
+        $sql_task = 'SELECT task_name FROM bdd_task WHERE list_name="'.$list_name.'"';
+        foreach ($my_Db_Connection->query($sql_task) as $task) {
+                $array_task_list[]=$task["task_name"];
+        }
+        return $array_task_list;
     }
 
-    return $array_team;
-}
-*/
+function task_info_retrieve($my_Db_Connection, $list_name){
+    // récupérer les noms des tâches par liste existante dans une variable
+        $array_task=[];
+    
+        $sql_task = 'SELECT list_name, task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task WHERE list_name="'.$list_name.'"';
+        foreach ($my_Db_Connection->query($sql_task) as $task) {
+                $array_task[$task["task_name"]]=array("task_create_date" => $task["task_create_date"],
+                "task_create_by" => $task["task_create_by"],
+                "task_description" => $task["task_description"],
+                "task_responsible" => $task["task_responsible"],
+                "task_end_date" => $task["task_end_date"],
+                "task_important" => $task["task_important"],
+                "task_status" => $task["task_status"],
+                "task_comment" => $task["task_comment"]);
+        }
+        return $array_task;
+    }

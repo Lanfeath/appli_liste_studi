@@ -76,11 +76,10 @@ include_once "../../assets/php/var.php";
                         </div>
 
                         <div>
-                            <label for="task_list_ref">Liste associée à la tâche:</label>
+                            <label for="list_name">Liste associée à la tâche:</label>
 
-                            <select name="task_list_ref" id="task_list_ref" required>
+                            <select name="list_name" id="list_name" required>
                                 <option value="">--Choisir la liste--</option>
-                                <option value="Aucune">Aucune</option>
                                 <?php
                                     for ($i=0;$i < count($array_list);$i++){
                                     echo '<option value="'.$array_list[$i].'">'.$array_list[$i].'</option>';

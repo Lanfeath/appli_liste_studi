@@ -12,7 +12,7 @@ include "../var.php";
     $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
         
     // create an array of all the POST variables you want to use
-    $fields = array('task_name', 'task_list_ref','task_create_by','task_description','task_responsible', 'task_status','task_end_date','task_important','task_comment');
+    $fields = array('task_name', 'list_name','task_create_by','task_description','task_responsible', 'task_status','task_end_date','task_important','task_comment');
 
     // prepare SQL statement and bind values    
     $stm_insert = $my_Db_Connection->prepare(query_insert($dbtable,$fields)) ;

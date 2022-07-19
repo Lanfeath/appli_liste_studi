@@ -48,16 +48,14 @@ include "../var.php";
         }
 
         $stm_insert->execute();
-        $array_list=[];
-                // on mets les noms des liste existantes dans une variable
-        $sql_liste = "SELECT list_name FROM bdd_lists";
-        foreach ($my_Db_Connection->query($sql_liste) as $liste) {
-                $array_list[]=$liste["list_name"];
-        }
+
+        //retrieve the existing list 
+        $array_list= list_retrieve($my_Db_Connection);
 
         $_SESSION["team_members"]=$array_team;
         $_SESSION["list_name"]=$array_list;
 
+        var_dump($array_list);
         include("../var.php"); //used to insert new value with session active
 
         header('Location: ../../../pages/nouvel_element/nouvel_element.html?result_list=success');
