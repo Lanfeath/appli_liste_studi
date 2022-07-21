@@ -155,6 +155,9 @@ $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
                         if($_GET['result_task']==="error"){
                             echo "<p style='color:red'>Une erreur est survenue lors de la création de la tâche</p>";
                         }
+                        if($_GET['result_task']==="error1"){
+                            echo "<p style='color:rgb(255, 136, 0)'>Utilisez un autre nom de tâche</p>";
+                        }
                     }
                 ?>
             </div>

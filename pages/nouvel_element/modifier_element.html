@@ -1,0 +1,223 @@
+<?php
+include_once "../../assets/php/var.php";
+include_once "../../assets/php/functions.php";
+
+// vérifier que l'on soit connecté pour accéder aux pages sinon retour vers index
+//(!$is_connected)?header('Location: ../../index.html'):"";
+
+//connection to DB
+$my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
+
+//si la variable est définie on est dans le cas d'une liste
+if (isset($_POST['Delete_list']))
+{ 
+    $message=db_dump_list($my_Db_Connection, $_POST['Delete_list']);
+}
+
+if (isset($_POST['Delete_task']))
+{ 
+    $message=db_dump_task($my_Db_Connection, $_POST['Delete_task']);
+}
+// $_POST['modif_list']="True";
+ // $_POST['modif_task']="False";
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Modifier element</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="../../assets/css/style.css">
+    </head>
+
+    <body>
+        <!-- insertion of standard header -->
+        <?php include_once("../../assets/std_page/header.html") ?>
+
+        <!-- insertion of standard navbar -->
+        <?php include_once("../../assets/std_page/nav_bar.html") ?>
+
+        <main>
+            
+            <!-- En venant depuis la barre de navigation == selectionner l'élément a modifier -->
+
+            <?php
+            $list_task="test1";
+            $list_description="test1";
+            if (!isset($_POST['modif_list']) || !isset($_POST['modif_task']))
+                {         
+                    echo '<div>
+                        <h1>Quel élément voulez vous modifier ?</h1> 
+
+                        <form action="./modifier_element.html" method="POST">
+                            <div>
+                                <label for="list_name">Les listes existantes:</label>
+
+                                <select name="list_name" id="list_name" required>
+                                    <option value="">--Choisir la liste--</option>';
+                                    // impression pour chaque liste existante
+                                    $array_list= list_retrieve($my_Db_Connection);
+
+                                        for ($i=0;$i < count($array_list);$i++){
+                                        echo '<option value="'.$array_list[$i].'">'.$array_list[$i].'</option>';
+                                        }
+                                echo'</select>
+                            </div>
+                            <div>
+                                <label for="list_name">Les tâches existantes:</label>
+
+                                <select name="list_name" id="list_name" required>
+                                    <option value="">--Choisir la tâche--</option>';
+                                    // impression pour chaque tâche existante
+                                    $array_task= task_list_retrieve($my_Db_Connection,"");
+
+                                        for ($i=0;$i < count($array_task);$i++){
+                                        echo '<option value="'.$array_task[$i].'">'.$array_task[$i].'</option>';
+                                        }
+                                echo'</select>
+                            </div>
+
+                            </div>
+                            <button type="submit" value="'.$list.'">Envoyer la sélection</button>
+                        </form>
+                    </div>';
+                }
+            ?>
+
+            <!-- En fonction de la variable on modifie les listes... -->
+
+            <?php
+            $list="test1";
+            $list_description="test1";
+            if (isset($_POST['modif_list']))
+                { 
+                    
+                    echo '<div>
+                        <h1>Modification de la liste "'.$list.'"</h1> 
+
+                        <form action="./modifier_element.html" method="POST">
+                            <div class="">
+                                <div id="list_name" class="form-group">
+                                    <label for="task_name">Nom de la liste</label>
+                                    <input class="form-control-sm mx-2" type="text" placeholder="'.$list.'" name="list_name" required>
+                                </div>
+
+                                <div id="list_description" class="form-group">
+                                    <label for="list_description">Description de la liste</label>
+                                    <textarea rows="2" cols="50" name="list_description" placeholder="'.$list_description.'" ></textarea>
+                                </div>
+
+                            </div>
+                            <button type="submit" value="'.$list.'">Enregistrer les Modifications</button>
+                        </form>
+                    </div>';
+                }
+            ?>
+
+
+            <!-- ... ou les tâches -->
+            <?php
+            $task="test1";
+            $list_task="test0";
+            $task_description="test2";
+            $task_responsible="test3";
+            $task_status="test4";
+            $task_end_date="test5";
+            $task_important="test6";
+            $task_comment="test7";
+            
+            if (isset($_POST['modif_task']))
+                { 
+                    
+                    echo '<div>
+                        <h1>Modification de la tâche "'.$task.'"</h1>
+                        <form action="./modifier_element.html" method="POST">
+                            <div class="">
+                                <div id="task_name" class="form-group">
+                                    <label for="task_name">Nom de la tâche</label>
+                                    <input class="form-control-sm mx-2" type="text" placeholder="'.$task.'" name="task_name" required>
+                                </div>
+
+                                <div>
+                                    <label for="list_name">Liste associée à la tâche:</label>
+
+                                    <select name="list_name" id="list_name" required>
+                                        <option value="">"'.$list_task.'"</option>';
+                                        // impression pour chaque liste existante
+                                        $array_list= list_retrieve($my_Db_Connection);
+
+                                            for ($i=0;$i < count($array_list);$i++){
+                                            echo '<option value="'.$array_list[$i].'">'.$array_list[$i].'</option>';
+                                            }
+                                    echo'</select>
+                                </div>
+
+                                <div id="task_description" class="form-group">
+                                    <label for="task_description">Description de la tâche</label>
+                                    <textarea rows="4" cols="50" name="task_description" placeholder="'.$task_description.'" required></textarea>
+                                </div>
+
+                                <div>
+                                    <label for="task_responsible">Qui est le responsable?</label>
+
+                                    <select name="task_responsible" id="task_responsible" required>
+                                        <option value="">"'.$task_responsible.'"</option>
+                                        <option value="'.ucfirst($username).'">Moi ('.ucfirst($username).') </option>';
+                                            // on mets les noms des membres de l'équipe dans le menu
+                                            for($i = 0; $i < count($array_team); ++$i) {
+                                                echo ' <option value="'.$array_team[$i].'">'.$array_team[$i].'</option>';
+                                            }
+                                        echo '<option value="autre">Autre (voir commentaires)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="task_status">Etat de la tâche?</label>
+
+                                    <select name="task_status" id="task_status" required>
+                                        <option value="">"'.$task_status.'"</option>
+                                        <option value="Non commencée">Non commencée</option>
+                                        <option value="En cours">En cours</option>
+                                        <option value="Terminée">Terminée</option>
+                                        <option value="En suspend">En suspend</option>
+                                    </select>
+                                </div>
+
+                                <div id="task_end_date" class="form-group">
+                                    <label for="task_end_date">Date de fin requise: </label>
+                                    <input class="form-control-sm mx-2" type="date" placeholder="'.$task_end_date.'" name="task_end_date" required>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="task_important" name="task_important" value="1">
+                                    <label for="important">A cocher si la tâche est importante</label>
+                                </div>
+                                <div id="task_comment" class="form-group">
+                                    <label for="task_comment">Commentaires</label>
+                                    <textarea rows="1" cols="50" name="task_comment" placeholder="'.$task_comment.'"></textarea>
+                                </div>
+                            </div>
+                            <input type="submit" value="Modifier la tâche '.$task.'">
+                        </form>
+
+                        <form action="./list_view.html" method="post">
+                            <button type="submit" class="btn btn-sm btn-primary">Retour</button>
+                        </form>
+
+                    </div>';
+                }
+                ?>
+        </main>
+
+
+
+        <!-- insertion of standard footer -->
+        <?php include_once("../../assets/std_page/footer.html") ?>
+
+    </body>
+</html>

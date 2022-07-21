@@ -109,8 +109,14 @@ function list_retrieve($my_Db_Connection){
 function task_list_retrieve($my_Db_Connection, $list_name){
     // récupérer les noms des tâches par liste existante dans une variable
         $array_task_list=[];
-    
-        $sql_task = 'SELECT task_name FROM bdd_task WHERE list_name="'.$list_name.'"';
+
+        if ($list_name===""){
+            $sql_task = 'SELECT task_name FROM bdd_task';
+        }
+        else{
+            $sql_task = 'SELECT task_name FROM bdd_task WHERE list_name="'.$list_name.'"';
+        }
+        
         foreach ($my_Db_Connection->query($sql_task) as $task) {
                 $array_task_list[]=$task["task_name"];
         }
@@ -120,8 +126,14 @@ function task_list_retrieve($my_Db_Connection, $list_name){
 function task_info_retrieve($my_Db_Connection, $list_name){
     // récupérer les noms des tâches par liste existante dans une variable
         $array_task=[];
-    
-        $sql_task = 'SELECT list_name, task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task WHERE list_name="'.$list_name.'"';
+
+        if ($list_name===""){
+            $sql_task = 'SELECT task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task';
+        }
+        else{
+        $sql_task = 'SELECT task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task WHERE list_name="'.$list_name.'"';
+        }
+
         foreach ($my_Db_Connection->query($sql_task) as $task) {
                 $array_task[$task["task_name"]]=array("task_create_date" => $task["task_create_date"],
                 "task_create_by" => $task["task_create_by"],
