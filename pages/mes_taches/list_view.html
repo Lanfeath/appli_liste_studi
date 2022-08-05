@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include "../../assets/php/var.php";
 include "../../assets/php/functions.php";
 
@@ -8,7 +10,7 @@ include "../../assets/php/functions.php";
 //connection to DB
 $my_Db_Connection= db_connect($servername,$db_to_use,$db_username,$db_password);
 
-
+// suppression des valeurs
 if (isset($_POST['Delete_list']))
 { 
     $message=db_dump_list($my_Db_Connection, $_POST['Delete_list']);
@@ -17,6 +19,21 @@ if (isset($_POST['Delete_list']))
 if (isset($_POST['Delete_task']))
 { 
     $message=db_dump_task($my_Db_Connection, $_POST['Delete_task']);
+}
+
+//modification des valeurs:
+if (isset($_POST['Modify_list']))
+{   
+    $_SESSION["Modify_list"]= $_POST['Modify_list'];
+    header('Location: ../nouvel_element/modifier_element.html?list=true');
+}
+
+if (isset($_POST['Modify_task']))
+{ 
+    $_SESSION["Modify_task"]= $_POST['Modify_task'];
+    var_dump($_SESSION["Modify_task"]);
+    // die;
+    header('Location: ../nouvel_element/modifier_element.html?task=true');
 }
 
 ?>
@@ -53,6 +70,7 @@ if (isset($_POST['Delete_task']))
 
         // impression pour chaque liste existante
         $array_list= list_retrieve($my_Db_Connection);
+        $array_list_info= list_info_retrieve($my_Db_Connection,"");
 
         foreach ($array_list as $list_name)
         {
@@ -73,6 +91,9 @@ if (isset($_POST['Delete_task']))
                     <div class="row">
                         <h3 class="col-4"> Aucune liste </h3>
                         <h3 class="col-8">Tâches terminées: '.$count_finished.'/'.count($task_list).'</h3>
+                    </div>
+                    <div class="row">
+                        <h4>Regroupe les tâches sans listes</h4>
                     </div>';
             }
             else{
@@ -83,10 +104,13 @@ if (isset($_POST['Delete_task']))
                     <h3 class="col-4">Tâches terminées: '.$count_finished.'/'.count($task_list).'</h3>
                     <div class="col-4 align-right">
                         <form action="./list_view.html" method="post">
-                            <button type="submit" class="btn btn-sm btn-primary">Modifier</button>
+                            <button type="submit" class="btn btn-sm btn-primary"  value="'.$list_name.'" name="Modify_list">Modifier</button>
                             <button type="submit" class="btn btn-sm btn-alert" value="'.$list_name.'" name="Delete_list" >Supprimer</button>
                         </form>
                     </div>
+                </div>
+                <div class="row">
+                    <h4>Description de la liste:</h4>
                 </div>';
             }
             foreach ($task_list as $list)
@@ -98,7 +122,7 @@ if (isset($_POST['Delete_task']))
                             '.$list.'
                             <div>
                                 <form action="./list_view.html" method="post">
-                                    <button type="submit" class="btn btn-sm btn-primary">Modifier</button>
+                                    <button type="submit" class="btn btn-sm btn-primary" value="'.$list.'" name="Modify_task" >Modifier</button>
                                     <button type="submit" class="btn btn-sm btn-alert" value="'.$list.'" name="Delete_task" >Supprimer</button>
                                 <form>
                             </div>

@@ -123,19 +123,38 @@ function task_list_retrieve($my_Db_Connection, $list_name){
         return $array_task_list;
     }
 
+function list_info_retrieve($my_Db_Connection, $list_name){
+    // récupérer les noms des tâches par liste existante dans une variable
+        $array_list=[];
+
+        if ($list_name===""){
+            $sql_list = 'SELECT list_name, list_description FROM bdd_lists';
+        }
+        else{
+        $sql_list = 'SELECT list_name, list_description FROM bdd_lists WHERE list_name="'.$list_name.'"';
+        }
+
+        foreach ($my_Db_Connection->query($sql_list) as $list) {
+                $array_list=array("list_description" => $list["list_description"]);
+        }
+        
+        return $array_list;
+    }
+
 function task_info_retrieve($my_Db_Connection, $list_name){
     // récupérer les noms des tâches par liste existante dans une variable
         $array_task=[];
 
         if ($list_name===""){
-            $sql_task = 'SELECT task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task';
+            $sql_task = 'SELECT list_name, task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task';
         }
         else{
-        $sql_task = 'SELECT task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task WHERE list_name="'.$list_name.'"';
+        $sql_task = 'SELECT list_name, task_name, task_create_date, task_create_by, task_description, task_responsible, task_end_date, task_important, task_status,task_comment FROM bdd_task WHERE list_name="'.$list_name.'"';
         }
 
         foreach ($my_Db_Connection->query($sql_task) as $task) {
-                $array_task[$task["task_name"]]=array("task_create_date" => $task["task_create_date"],
+                $array_task[$task["task_name"]]=array("list_name" => $task["list_name"],
+                "task_create_date" => $task["task_create_date"],
                 "task_create_by" => $task["task_create_by"],
                 "task_description" => $task["task_description"],
                 "task_responsible" => $task["task_responsible"],
@@ -146,3 +165,78 @@ function task_info_retrieve($my_Db_Connection, $list_name){
         }
         return $array_task;
     }
+
+function db_modify_list($db_name,$list_name,$new_list_name, $list_description)
+{
+    // function to modify the list from DB
+    try{
+        $modify = 'UPDATE bdd_lists SET list_name = :new_list_name, list_description = :list_description WHERE list_name = :list_name';
+        $stmt = $db_name->prepare($modify);
+        $stmt->bindValue(":list_name",$list_name);
+        $stmt->bindValue(":new_list_name",$new_list_name);
+        $stmt->bindValue(":list_description",$list_description);
+        $stmt->execute();
+
+        $message="la liste '".$list_name."' a été modifiée: <br> nouveau nom:'" . $new_list_name."' <br> description: ".$list_description;
+     }
+    catch(PDOException $error)
+    {
+        echo 'Connection error: ' . $error->getMessage() ."<br>";
+        die();
+    }
+
+    // modification du nom de liste dans la table tâche
+    try{
+        $modify_task = 'UPDATE bdd_task SET list_name = :new_list_name WHERE list_name = :list_name';
+        $stmt_task = $db_name->prepare($modify_task);
+        $stmt_task->bindValue(":list_name",$list_name);
+        $stmt_task->bindValue(":new_list_name",$new_list_name);
+        $stmt_task->execute();
+     }
+    catch(PDOException $error2)
+    {
+        echo 'Connection error: ' . $error2->getMessage() ."<br>";
+        die();
+    }
+    return $message;
+}
+
+function db_modify_task($db_name,$task_name,$new_task_name, $list_name,$task_modify_date,$task_modify_by,$task_description,$task_responsible,$task_end_date,$task_important,$task_status,$task_comment)
+{
+    // function to modify the task from DB
+    try{
+        $modify = 'UPDATE bdd_task SET list_name= :list_name,
+                    task_name= :new_task_name,
+                    task_modify_date= :task_modify_date,
+                    task_modify_by= :task_modify_date,
+                    task_description= :task_description, 
+                    task_responsible= :task_responsible,
+                    task_end_date= :task_end_date, 
+                    task_important= :task_important, 
+                    task_status= :task_status,
+                    task_comment= :task_comment 
+                    WHERE task_name = :task_name';
+        $stmt = $db_name->prepare($modify);
+        $stmt->bindValue(":list_name",$list_name);
+        $stmt->bindValue(":task_name",$task_name);
+        $stmt->bindValue(":new_task_name",$new_task_name);
+        $stmt->bindValue(":task_modify_date",$task_modify_date);      
+        $stmt->bindValue(":task_modify_by",$task_modify_by);
+        $stmt->bindValue(":task_description",$task_description);
+        $stmt->bindValue(":task_responsible",$task_responsible);
+        $stmt->bindValue(":task_end_date",$task_end_date);
+        $stmt->bindValue(":task_important",$task_important);
+        $stmt->bindValue(":task_status",$task_status);
+        $stmt->bindValue(":task_comment",$task_comment);
+        $stmt->execute();
+
+        $message="la tâche '".$task_name."' a été modifiée: <br> nouveau nom:'" . $new_task_name."' <br> description: ".$task_description;
+     }
+    catch(PDOException $error)
+    {
+        echo 'Connection error: ' . $error->getMessage() ."<br>";
+        die();
+    }
+
+    return $message;
+}

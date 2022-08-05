@@ -75,6 +75,16 @@ main {
     border: 2px solid #516E50;
 }
 
+H3 {
+    font-family: 'Saniretro';
+    font-size: 3rem;
+    font-weight: bold;
+    color: #042324;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+
 /* user img*/
 .blockImg {
     display: flex;
